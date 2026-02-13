@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>For Divya 💖</title>
+
+<style>
+body{
+    margin:0;
+    height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    font-family:'Segoe UI',sans-serif;
+    overflow:hidden;
+    color:white;
+}
+
+/* Background slideshow */
+.background{
+    position:fixed;
+    width:100%;
+    height:100%;
+    top:0;
+    left:0;
+    z-index:-2;
+    overflow:hidden;
+}
+
+.background img{
+    position:absolute;
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    opacity:0;
+    animation:slideShow 25s infinite;
+}
+
+.background img:nth-child(1){animation-delay:0s;}
+.background img:nth-child(2){animation-delay:5s;}
+.background img:nth-child(3){animation-delay:10s;}
+.background img:nth-child(4){animation-delay:15s;}
+.background img:nth-child(5){animation-delay:20s;}
+
+@keyframes slideShow{
+    0%{opacity:0;}
+    5%{opacity:1;}
+    20%{opacity:1;}
+    25%{opacity:0;}
+    100%{opacity:0;}
+}
+
+/* Pink overlay */
+.overlay{
+    position:fixed;
+    width:100%;
+    height:100%;
+    background:linear-gradient(135deg,rgba(255,117,140,0.7),rgba(255,126,179,0.7));
+    z-index:-1;
+}
+
+/* Content */
+.container, .valentine-card{
+    text-align:center;
+    width:90%;
+    max-width:420px;
+    transition:1s;
+}
+
+h1{
+    font-size:26px;
+}
+
+button{
+    padding:14px 28px;
+    border:none;
+    border-radius:30px;
+    font-size:16px;
+    cursor:pointer;
+    transition:0.3s;
+}
+
+button:hover{
+    transform:scale(1.1);
+}
+
+.primary-btn{
+    background:white;
+    color:#ff2e63;
+    font-weight:bold;
+}
+
+.hidden{
+    display:none;
+}
+
+.dialogue{
+    min-height:40px;
+    margin-top:10px;
+}
+
+.buttons{
+    margin-top:30px;
+    position:relative;
+    height:120px;
+}
+
+.buttons button{
+    position:absolute;
+}
+
+#yesBtn{
+    left:20%;
+    background:#ff2e63;
+    color:white;
+}
+
+#noBtn{
+    right:20%;
+    background:#ffd1dc;
+    color:#333;
+}
+
+/* Floating hearts */
+.heart{
+    position:absolute;
+    animation:floatUp linear infinite;
+}
+
+@keyframes floatUp{
+    0%{transform:translateY(100vh);opacity:1;}
+    100%{transform:translateY(-10vh);opacity:0;}
+}
+
+/* Fireworks */
+.firework{
+    position:absolute;
+    width:6px;
+    height:6px;
+    border-radius:50%;
+    background:white;
+    animation:explode 1s ease-out forwards;
+}
+
+@keyframes explode{
+    0%{transform:translate(0,0);opacity:1;}
+    100%{transform:translate(var(--x),var(--y));opacity:0;}
+}
+</style>
+</head>
+
+<body>
+
+<div class="background">
+    <img src="photo1.jpeg">
+    <img src="photo2.jpeg">
+    <img src="photo3.jpeg">
+    <img src="photo4.jpeg">
+    <img src="photo5.jpeg">
+</div>
+
+<div class="overlay"></div>
+
+<div class="container" id="intro">
+    <h1>Hi Divya 💌<br>There is something special for you…</h1>
+    <button class="primary-btn" onclick="startSurprise()">Click to see ❤️</button>
+</div>
+
+<div class="valentine-card hidden" id="valentine">
+    <h1>Divya 💖<br>Will You Be My Valentine Again?</h1>
+    <div class="dialogue" id="dialogue">
+        One year down… forever to go? 😌
+    </div>
+    <div class="buttons">
+        <button id="yesBtn">Yes ❤️</button>
+        <button id="noBtn">No 🙈</button>
+    </div>
+</div>
+
+<audio id="bgMusic" loop>
+    <source src="love.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+const intro = document.getElementById("intro");
+const valentine = document.getElementById("valentine");
+const music = document.getElementById("bgMusic");
+const noBtn = document.getElementById("noBtn");
+const yesBtn = document.getElementById("yesBtn");
+const dialogue = document.getElementById("dialogue");
+
+let noCount = 0;
+
+const funnyLines = [
+    "Divya 😳 Are you serious?",
+    "After one whole year together? 😭",
+    "Think again… I'm kinda cute 🥺",
+    "This button seems broken 👀",
+    "System error ❌",
+    "Only YES works here 😌"
+];
+
+function startSurprise(){
+    intro.style.opacity="0";
+    setTimeout(()=>{
+        intro.classList.add("hidden");
+        valentine.classList.remove("hidden");
+        music.play().catch(()=>{});
+        createHearts();
+    },1000);
+}
+
+function moveNo(){
+    noCount++;
+    if(noCount < funnyLines.length){
+        dialogue.innerText = funnyLines[noCount];
+    }
+
+    const x = Math.random()*250;
+    const y = Math.random()*80;
+
+    noBtn.style.right="auto";
+    noBtn.style.left=x+"px";
+    noBtn.style.top=y+"px";
+}
+
+noBtn.addEventListener("mouseover",moveNo);
+noBtn.addEventListener("click",moveNo);
+
+yesBtn.addEventListener("click",()=>{
+    valentine.innerHTML=`
+        <h1>Divyaaaa 😍</h1>
+        <p style="font-size:18px;margin-top:10px;">
+        You just made me the happiest guy alive 💍❤️<br>
+        One year with you has been magical…<br>
+        And I want forever with you 💖
+        </p>
+    `;
+    createHearts();
+    launchFireworks();
+});
+
+function createHearts(){
+    for(let i=0;i<40;i++){
+        const heart=document.createElement("div");
+        heart.classList.add("heart");
+        heart.innerHTML="💖";
+        heart.style.left=Math.random()*100+"vw";
+        heart.style.animationDuration=(Math.random()*3+2)+"s";
+        heart.style.fontSize=(Math.random()*25+15)+"px";
+        document.body.appendChild(heart);
+        setTimeout(()=>{heart.remove();},5000);
+    }
+}
+
+function launchFireworks(){
+    for(let i=0;i<80;i++){
+        const fw=document.createElement("div");
+        fw.classList.add("firework");
+
+        const x = (Math.random()-0.5)*400+"px";
+        const y = (Math.random()-0.5)*400+"px";
+
+        fw.style.setProperty("--x",x);
+        fw.style.setProperty("--y",y);
+        fw.style.left="50%";
+        fw.style.top="50%";
+
+        document.body.appendChild(fw);
+        setTimeout(()=>{fw.remove();},1000);
+    }
+}
+</script>
+
+</body>
+</html>
